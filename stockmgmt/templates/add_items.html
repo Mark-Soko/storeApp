@@ -46,9 +46,11 @@
     <!-- Custom styles for this template -->
     <link href="{% static 'css/navbar-top-fixed.css' %}" rel="stylesheet">
   </head>
+
   <body>
    {% include 'navbar.html'%}
 <main role="main" class="container">
+  
   <div class="jumbotron">
     <div class="header">{{header}}</div>
 	<form method='POST' action=''>{% csrf_token %}
