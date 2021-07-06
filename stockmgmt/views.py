@@ -103,9 +103,9 @@ def issue_items(request, pk):
     queryset = Stock.objects.get(id=pk)
     form = IssueForm(request.POST or None, instance=queryset)
     if form.is_valid():
-        instance = form.save(commit=False)
+        instance = formtotalPrice.save(commit=False)
         instance.quantity -= instance.issue_quantity
-        #instance.issue_by = str(request.user)
+        # instance.issue_by = str(request.user)
         messages.success(request, "Issued SUCCESSFULLY. " + str(instance.quantity) +
                          " " + str(instance.item_name) + "s now left in Store")
         instance.save()
@@ -145,4 +145,10 @@ def receive_items(request, pk):
 
 def dashboard(request):
     queryset = Stock.objects.all()
+    if request.POST:
+       amountPaid = request.POST['amountPaid']
+       balance = request.POST.get('balance') 
+       totalPrice = int(amountPaid) - int(balance)
     return render(request, 'dashboard.html', {'queryset': queryset})
+
+
