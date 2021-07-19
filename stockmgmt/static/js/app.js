@@ -3,7 +3,7 @@ if (document.readyState == 'loading') {
 } else {
     ready()
 }
- 
+
 function ready() {
     var removeCartItemButtons = document.getElementsByClassName('btn-danger')
     for (var i = 0; i < removeCartItemButtons.length; i++) {
@@ -17,7 +17,7 @@ function ready() {
         input.addEventListener('change', quantityChanged)
     }
 
- 
+
     var addToCartButtons = document.getElementsByClassName('shop-item-button')
     for (var i = 0; i < addToCartButtons.length; i++) {
         var button = addToCartButtons[i]
@@ -26,31 +26,33 @@ function ready() {
 
     document.getElementsByClassName('btn-purch')[0].addEventListener('click', purchaseClicked)
     document.getElementsByClassName('btn-complete')[0].addEventListener('click', purchaseComplete)
-  
-    
+
+
+
+
 }
-function purchaseClicked(event){
+function purchaseClicked(event) {
     total = parseFloat(document.getElementsByClassName('cart-total-price')[0].innerText.replace('Ksh.', ''))
-    document.getElementById('totalExpenditure').innerText ='Ksh.' + total
+    document.getElementById('totalExpenditure').innerText = 'Ksh.' + total
 
 }
 
-function calculate(event){
+function calculate(event) {
     total = parseFloat(document.getElementsByClassName('cart-total-price')[0].innerText.replace('Ksh.', ''))
-    amountPaid =document.getElementsByClassName('amountPaid')[0].innerText
+    amountPaid = document.getElementsByClassName('amountPaid')[0].innerText
     balance = amountPaid - total
     document.getElementsByClassName('lbl-balance')[0].innerText = 'Ksh.' + balance
 }
 
 function purchaseComplete() {
-  
+
     var cartItems = document.getElementsByClassName('cart-items')[0]
     while (cartItems.hasChildNodes()) {
         cartItems.removeChild(cartItems.firstChild)
     }
     updateCartTotal()
 }
-function calculateBalance(event){
+function calculateBalance(event) {
 
 }
 
@@ -99,7 +101,7 @@ function addItemToCart(title, price, imageSrc) {
         </div>
         <span class="cart-price cart-column">${price}</span>
         <div class="cart-quantity cart-column">
-            <input class="cart-quantity-input" type="number" value="1">
+            <input class="cart-quantity-input" type="number" id= 'itemQty' value="1">
             <button class="btn btn-danger" type="button">X</button>
         </div>`
     cartRow.innerHTML = cartRowContents
@@ -119,9 +121,32 @@ function updateCartTotal() {
         var price = parseFloat(priceElement.innerText.replace('Ksh.', ''))
         var quantity = quantityElement.value
         total = total + (price * quantity)
+        var item_name = cartRow.getElementsByClassName('cart-item-title')[0].innerText
+        //console.log(price,total,quantity, item_name)
+        console.log(item_name,price,quantity)
+        console.log(total)
+
+        // Ajax
+		$.ajax({
+			url:'/dashboard',
+            type:'get',
+            dataType:'text',
+			data:{
+				'item_name':item_name,
+				'quantity':quantity,
+				'price':price
+			},
+			dataType:'text',
+			success:function(res){
+				print('Success bro')
+			}
+		});
+		// End
+
     }
     total = Math.round(total * 100) / 100
     document.getElementsByClassName('cart-total-price')[0].innerText = 'Ksh.' + total
-    
+   
 }
+
 

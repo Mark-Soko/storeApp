@@ -1,0 +1,120 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'css//bootstrap.min.css' %}" type="text/css" rel="stylesheet" media="screen,projection" />
+    <script src="{% static 'js/app.js' %}" async></script>
+    <script src="{% static '/js/jquery-3.5.0.min.js' %}"></script>
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+    <style>
+        .clsscroll {
+            height: 480px;
+            width: 730px;
+            background-color: rgb(200, 216, 216);
+            overflow-y: scroll;
+        }
+
+        .clsscroll2 {
+            height: 250px;
+            width: 480px;
+            background-color: rgb(255, 255, 255);
+            overflow-y: scroll;
+        }
+    </style>
+    <script>
+        //Handles csrf_token in json
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.device-widthsubstring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+
+        $(document).ready(function () {
+            // Get value on keyup funtion
+            $("#price, #qty").keyup(function () {
+
+                var total = 0;
+                var x = Number($("#price").val());
+                var y = parseFloat(document.getElementsByClassName('totalExpenditure')[0].innerText.replace('Ksh.', ''))
+                var total = x - y;
+
+                $('#total').val(total);
+                $('#total1').val(total);
+
+            });
+        });
+    </script>
+
+    <title>DDTECH</title>
+</head>
+
+<body>
+    <!--navbar.html -->
+	<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+		<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+			<a class="navbar-brand brand-logo mr-5" href=""><img src="{% static 'img/logo.jpg' %}" class="mr-2" alt="logo" /></a>
+			<a class="navbar-brand brand-logo-mini" href=""><img src="{% static 'img/logo.jpg' %}" alt="DDTECH" /></a>
+		</div>
+		<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+			<button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+				<span class="ti-view-list"></span>
+			</button>
+			<ul class="navbar-nav mr-lg-2">
+				<li class="nav-item nav-search d-none d-lg-block">
+					<div class="input-group">
+						<div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+							<span class="input-group-text" id="search">
+								<i class="ti-search"></i>
+							</span>
+						</div>
+						<input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
+							aria-label="search" aria-describedby="search">
+					</div>
+				</li>
+			</ul>
+			<ul class="navbar-nav navbar-nav-right">
+				<li class="nav-item">
+					<h4><a href="#" style="text-decoration: none; text-decoration-color: black;">Admin</a></h4>
+				</li>
+				<li class="nav-item nav-profile ">
+					<a class="nav-link" href="#">
+						<img src="{% static 'img/logo.jpg' %}" alt="profile" />
+					</a>
+				</li>
+			</ul>
+			<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+				data-toggle="offcanvas">
+				<span class="ti-view-list"></span>
+			</button>
+		</div>
+	</nav>
+
+	<!--End-->
+
+    {% block content %}
+    {% endblock content %}
+  
+
+    <script src="{% static 'js/bootstrap/bootstrap.bundle.js' %}"></script>
+</body>
+
+</html>

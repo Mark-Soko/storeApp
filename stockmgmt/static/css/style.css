@@ -383,3 +383,106 @@ html, body {
   margin: 40px auto 80px auto;
   font-size: 1.75em;
 }
+
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+/*table*/
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Mukta, sans-serif;
+  height: 100vh;
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  color: #4f546c;
+  font-size: 0.9rem;
+  background-color: #f9fbff;
+}
+
+table {
+  border-collapse: collapse;
+  -webkit-box-shadow: 0 5px 10px #e1e5ee;
+  box-shadow: 0 5px 10px #e1e5ee;
+  background-color: white;
+  text-align: left;
+  overflow: hidden;
+}
+
+table thead {
+  -webkit-box-shadow: 0 5px 10px #e1e5ee;
+  box-shadow: 0 5px 10px #e1e5ee;
+}
+
+table th {
+  padding: 1rem 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+table td {
+  padding: 1rem 2rem;
+}
+
+table a {
+  text-decoration: none;
+  color: #2962ff;
+}
+
+table .status {
+  border-radius: 0.2rem;
+  background-color: red;
+  padding: 0.2rem 1rem;
+  text-align: center;
+}
+
+table .status-pending {
+  background-color: #fff0c2;
+  color: #a68b00;
+}
+
+table .status-paid {
+  background-color: #c8e6c9;
+  color: #388e3c;
+}
+
+table .status-unpaid {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+
+table .amount {
+  text-align: right;
+}
+
+table tr:nth-child(even) {
+  background-color: #f4f6fb;
+}

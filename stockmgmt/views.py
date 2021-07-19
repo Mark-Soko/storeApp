@@ -1,76 +1,65 @@
-from django import forms
+#from django import forms
 from django.shortcuts import render, redirect
 from .models import*
 from .forms import *
-from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponse
+import json
 import csv
 from django.contrib import messages
 
 
+
 def home(request):
-    title = 'Welcome: This is the Home Page'
+    title = 'Locked'
     context = {
         "title": title,
-        'test': 'THis will be the content of the site. Have a look at it.'
     }
-    return render(request, "home.html", context)
+    return render(request, "lockscreen.html", context)
 
 
 def list_items(request):
-    header = 'List of Items'
-    queryset = Stock.objects.all()
-    form = StockSearchForm(request.POST or None)
+    Products = Product.objects.all()
+    select_category = Category.objects.all() 
     context = {
-        "header": header,
-        "queryset": queryset,
-        "form": form,
+        "Products": Products,
     }
-
-    if request.method == 'POST':
-        queryset = Stock.objects.filter(category__icontains=form['category'].value(),
-                                        item_name__icontains=form['item_name'].value(
-        )
-        )
-
-        # Checks whether the csv file is selected
-        if form['export_to_CSV'].value() == True:
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="List of stock.csv"'
-            writer = csv.writer(response)
-            writer.writerow(['CATEGORY', 'ITEM NAME', 'QUANTITY',
-                            'BUY PRICE', 'SELL PRICE', 'STOKED DATE', 'LAST UPDATED'])
-            instance = queryset
-            for stock in instance:
-                writer.writerow(
-                    [stock.category, stock.item_name, stock.quantity, stock.unit_buy_price, stock.unit_sell_price, stock.timestamp, stock.last_updated])
-            return response
-        context = {
-            "form": form,
-            "header": header,
-            "queryset": queryset,
-        }
     return render(request, "list_items.html", context)
 
 
-# Add item to the database
-def add_items(request):
-    form = StockCreateForm(request.POST or None)
+
+
+def add_category(request):
+    form = CreateCategoryForm(request.POST or None)
     if form.is_valid():
         form.save()
-        messages.success(request, 'Added successfully')
+        messages.success(request, 'Category added successful')
         return redirect('/list_items')
+    context ={
+        'form':form,
+    }
+    return render(request, 'add_category.html',context)
+
+
+
+def add_product(request):
+    form = ProductCreateForm(request.POST or None,request.FILES or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Product added successfully')
+        return redirect('/list_items')
+    
     context = {
         "form": form,
-        "title": "Add Item",
+        "title": "Add product",
     }
-    return render(request, "add_items.html", context)
+    return render(request, 'add_product.html', context)
 
 
-def update_items(request, pk):
-    queryset = Stock.objects.get(id=pk)
-    form = StockUpdateForm(instance=queryset)
+def update_product(request, pk):
+    queryset = Product.objects.get(id=pk)
+    form = ProductUpdateForm(instance=queryset)
     if request.method == 'POST':
-        form = StockUpdateForm(request.POST, instance=queryset)
+        form = ProductUpdateForm(request.POST,request.FILES, instance=queryset)
         if form.is_valid():
             form.save()
             messages.success(request, 'Updated successfully ')
@@ -79,11 +68,12 @@ def update_items(request, pk):
     context = {
         'form': form
     }
-    return render(request, 'add_items.html', context)
+    return render(request, 'add_product.html', context)
 
 
 def delete_items(request, pk):
-    queryset = Stock.objects.get(id=pk)
+    pass
+    queryset = Product.objects.get(id=pk)
     if request.method == 'POST':
         queryset.delete()
         messages.success(request, 'Deleted successfully ')
@@ -91,64 +81,97 @@ def delete_items(request, pk):
     return render(request, 'delete_items.html')
 
 
-def stock_detail(request, pk):
-    queryset = Stock.objects.get(id=pk)
-    context = {
-        "queryset": queryset,
-    }
-    return render(request, "stock_detail.html", context)
-
-
-def issue_items(request, pk):
-    queryset = Stock.objects.get(id=pk)
-    form = IssueForm(request.POST or None, instance=queryset)
-    if form.is_valid():
-        instance = formtotalPrice.save(commit=False)
-        instance.quantity -= instance.issue_quantity
-        # instance.issue_by = str(request.user)
-        messages.success(request, "Issued SUCCESSFULLY. " + str(instance.quantity) +
-                         " " + str(instance.item_name) + "s now left in Store")
-        instance.save()
-
-        return redirect('/stock_detail/'+str(instance.id))
-        # return HttpResponseRedirect(instance.get_absolute_url())
-
-    context = {
-        "title": 'Issue ' + str(queryset.item_name),
-        "queryset": queryset,
-        "form": form,
-        "username": 'Issue By: ' + str(request.user),
-    }
-    return render(request, "add_items.html", context)
-
-
-def receive_items(request, pk):
-    queryset = Stock.objects.get(id=pk)
-    form = ReceiveForm(request.POST or None, instance=queryset)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.quantity += instance.receive_quantity
-        instance.save()
-        messages.success(request, "Received SUCCESSFULLY. " +
-                         str(instance.quantity) + " " + str(instance.item_name)+"s now in Store")
-
-        return redirect('/stock_detail/'+str(instance.id))
-        # return HttpResponseRedirect(instance.get_absolute_url())
-    context = {
-        "title": 'Reaceive ' + str(queryset.item_name),
-        "instance": queryset,
-        "form": form,
-        "username": 'Receive By: ' + str(request.user),
-    }
-    return render(request, "add_items.html", context)
-
 
 def dashboard(request):
-    queryset = Stock.objects.all()
-    if request.POST:
-       amountPaid = request.POST['amountPaid']
-       balance = request.POST.get('balance') 
-       totalPrice = int(amountPaid) - int(balance)
-    return render(request, 'dashboard.html', {'queryset': queryset})
+    Products = Product.objects.all()
+    if request.GET:
+        amountPaid = int(request.GET['amountPaid'])
+        balance = int(request.GET.get('balance'))
+        totalCost = amountPaid - int(balance)
+        trans = Order(totalCost=totalCost,
+                          amountPaid=amountPaid, balance=balance, completed=True)
+        trans.save()
+    return render(request, 'dashboard.html', {'Products': Products})
 
 
+
+
+
+
+
+
+
+
+
+
+def stock_detail(request, pk):
+    pass
+# #     queryset = Stock.objects.get(id=pk)
+# #     context = {
+# #         "queryset": queryset,
+# #     }
+# #     return render(request, "stock_detail.html", context)
+
+
+# # def issue_items(request, pk):
+# #     queryset = Stock.objects.get(id=pk)
+# #     form = IssueForm(request.POST or None, instance=queryset)
+# #     if form.is_valid():
+# #         instance = formtotalPrice.save(commit=False)
+# #         instance.quantity -= instance.issue_quantity
+# #         # instance.issue_by = str(request.user)
+# #         messages.success(request, "Issued SUCCESSFULLY. " + str(instance.quantity) +
+# #                          " " + str(instance.item_name) + "s now left in Store")
+# #         instance.save()
+
+# #         return redirect('/stock_detail/'+str(instance.id))
+# #         # return HttpResponseRedirect(instance.get_absolute_url())
+
+# #     context = {
+# #         "title": 'Issue ' + str(queryset.item_name),
+# #         "queryset": queryset,
+# #         "form": form,
+# #         "username": 'Issue By: ' + str(request.user),
+# #     }
+# #    return render(request, "add_items.html", context)
+
+
+# # def receive_items(request, pk):
+# #     queryset = Stock.objects.get(id=pk)
+# #     form = ReceiveForm(request.POST or None, instance=queryset)
+# #     if form.is_valid():
+# #         instance = form.save(commit=False)
+# #         instance.quantity += instance.receive_quantity
+# #         instance.save()
+# #         messages.success(request, "Received SUCCESSFULLY. " +
+# #                          str(instance.quantity) + " " + str(instance.item_name)+"s now in Store")
+
+# #         return redirect('/stock_detail/'+str(instance.id))
+# #         # return HttpResponseRedirect(instance.get_absolute_url())
+# #     context = {
+# #         "title": 'Reaceive ' + str(queryset.item_name),
+# #         "instance": queryset,
+# #         "form": form,
+# #         "username": 'Receive By: ' + str(request.user),
+# #     }
+# #     return render(request, "add_items.html", context)
+
+
+
+
+
+
+
+# # def saveCart(request):
+# #     data = json.loads(request.body)
+# #     item_name = data["item_name"]
+# #     quantity = data["quantity"]
+# #     item_total = data["item_total"]
+# #     invoiceNo = random.randint(100, 10000000)
+    
+# #     print(item_name)
+# #     print(invoiceNo)
+# #     orderedItems = oderItem(invoiceNo=invoiceNo, item_name=item_name,
+# #                             quantity=quantity, item_price=item_total)
+
+# #     return JsonResponse("Saved", safe=False)

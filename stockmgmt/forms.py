@@ -1,13 +1,13 @@
 from django import forms
-from .models import Stock
+from .models import Category, Product
 
 
-class StockCreateForm(forms.ModelForm):
+class ProductCreateForm(forms.ModelForm):
 
     class Meta:
-        model = Stock
-        fields = ['category', 'item_name', 'quantity',
-                  'unit_buy_price', 'unit_sell_price']
+        model = Product
+        fields = ['category', 'name', 'qty_in_store',
+                  'Buy_price', 'price','image']
 
         def clean_category(self):
             category = self.cleaned_data.get('category')
@@ -16,34 +16,38 @@ class StockCreateForm(forms.ModelForm):
             return category
 
         def clean_item_name(self):
-            item_name = self.cleaned_data.get('item_name')
-            if not item_name:
+            product_name = self.cleaned_data.get('name')
+            if not product_name:
                 raise forms.ValidationError('This field is required')
-            return item_name
+            return product_name
 
 
-class StockSearchForm(forms.ModelForm):
-    export_to_CSV = forms.BooleanField(required=False)
+# class StockSearchForm(forms.ModelForm):
+#     export_to_CSV = forms.BooleanField(required=False)
 
+#     class Meta:
+#         model = Stock
+#         fields = ['category', 'item_name']
+
+class CreateCategoryForm(forms.ModelForm):
     class Meta:
-        model = Stock
-        fields = ['category', 'item_name']
+        model= Category
+        fields=['name']
 
-
-class StockUpdateForm(forms.ModelForm):
+class ProductUpdateForm(forms.ModelForm):
     class Meta:
-        model = Stock
-        fields = ['category', 'item_name', 'quantity',
-                  'unit_buy_price', 'unit_sell_price']
+        model = Product
+        fields = ['category', 'name', 'qty_in_store',
+                  'Buy_price', 'price','image']
 
 
-class IssueForm(forms.ModelForm):
-    class Meta:
-        model = Stock
-        fields = ['issue_quantity', 'issue_to']
+# class IssueForm(forms.ModelForm):
+#     class Meta:
+#         model = Stock
+#         fields = ['issue_quantity', 'issue_to']
 
 
-class ReceiveForm(forms.ModelForm):
-    class Meta:
-        model = Stock
-        fields = ['receive_quantity']
+# class ReceiveForm(forms.ModelForm):
+#     class Meta:
+#         model = Stock
+#         fields = ['receive_quantity']
