@@ -7,12 +7,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="{% static 'css//bootstrap.min.css' %}" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet"> 
     <script src="{% static 'js/app.js' %}" async></script>
-    <script src="{% static '/js/jquery-3.5.0.min.js' %}"></script>
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-3.5.0.min.js' %} "></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 
     <style>
         .clsscroll {
@@ -30,267 +29,189 @@
         }
     </style>
     <script>
-        //Handles csrf_token in json
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.device-widthsubstring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        const csrftoken = getCookie('csrftoken');
-
-
         $(document).ready(function () {
             // Get value on keyup funtion
             $("#price, #qty").keyup(function () {
 
                 var total = 0;
                 var x = Number($("#price").val());
-                var y = parseFloat(document.getElementsByClassName('totalExpenditure')[0].innerText.replace('Ksh.', ''))
+                var y =parseFloat(document.getElementsByClassName('totalExpenditure')[0].innerText.replace('Ksh.', ''))
+                //var y = Number($("#qty").val());
                 var total = x - y;
 
                 $('#total').val(total);
-                $('#total1').val(total);
 
             });
         });
     </script>
 
-    <title>DDTECH</title>
+    <title>Dashboard</title>
 </head>
 
 <body>
-    <!--navbar.html -->
-	<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-		<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-			<a class="navbar-brand brand-logo mr-5" href=""><img src="{% static 'img/logo.jpg' %}" class="mr-2" alt="logo" /></a>
-			<a class="navbar-brand brand-logo-mini" href=""><img src="{% static 'img/logo.jpg' %}" alt="DDTECH" /></a>
-		</div>
-		<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-			<button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-				<span class="ti-view-list"></span>
-			</button>
-			<ul class="navbar-nav mr-lg-2">
-				<li class="nav-item nav-search d-none d-lg-block">
-					<div class="input-group">
-						<div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-							<span class="input-group-text" id="search">
-								<i class="ti-search"></i>
-							</span>
-						</div>
-						<input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
-							aria-label="search" aria-describedby="search">
-					</div>
-				</li>
-			</ul>
-			<ul class="navbar-nav navbar-nav-right">
-				<li class="nav-item">
-					<h4><a href="#" style="text-decoration: none; text-decoration-color: black;">Admin</a></h4>
-				</li>
-				<li class="nav-item nav-profile ">
-					<a class="nav-link" href="#">
-						<img src="{% static 'img/logo.jpg' %}" alt="profile" />
-					</a>
-				</li>
-			</ul>
-			<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-				data-toggle="offcanvas">
-				<span class="ti-view-list"></span>
-			</button>
-		</div>
-	</nav>
-
-	<!--End-->
-<div class="bg-dark p-3" style="margin-top: 60px;">
-    <div class="row mx-0 py-3 bg-light">
-        <div class="col-sm-7">
-            <div class="card mb-3 rounded-3" style="z-index:1;">
-                <div class="card-body">
-                    <ul class="nav nav-pills " id="pills-tab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
-                                data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
-                                aria-selected="true">Timber nails</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
-                                data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
-                                aria-selected="false">Metal toools</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill"
-                                data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
-                                aria-selected="false">Roofing</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                    <div class="row row-cols-1 row-cols-md-4 g-4   clsscroll">
-
-                        {% for product in Products %}
-                        <div class="col">
-                            <div class="card" style="width: 200px;width: 200px;">
-                                <img class="card-img-top" src="{{product.image.url}}"
-                                    style="height: 100px;">
-                                <div class=" card-body">
-                                    <h6 class=" card-title" id="item_name">{{product.name}}</h6>
-                                    <h6 class="shop-item-price" id="item_price">{{ product.price}}</h6>
-                                    <button class=" btn btn-primary btn-sm shop-item-button" id="shop-btn"
-                                        data-action="add" data-product="{{instance.id}}">Add</button>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                    <div class="row row-cols-1 row-cols-md-4 g-4 clsscroll">
-                        <div class="col">
-                            <div class="card ">
-                                <img class="card-img-top" src="./images /pipeconnectors.jpg">
-                                <div class=" card-body">
-                                    <h6 class="card-title">Spanner </h6>
-                                    <h6 class="shop-item-price">Ksh.100</h6>
-                                    <button class=" btn btn-primary shop-item-button btn-sm">Add</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card ">
-                                <img class="card-img-top" src="./images /pipeconnectors.jpg">
-                                <div class=" card-body">
-                                    <h6 class="card-title">Screw driver </h6>
-                                    <h6 class="shop-item-price">Ksh.50</h6>
-                                    <button class=" btn btn-primary shop-item-button btn-sm">Add</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card ">
-                                <img class="card-img-top" src="./images /pipeconnectors.jpg">
-                                <div class=" card-body">
-                                    <h6 class=" card-title">5 inch nails </h6>
-                                    <h6 class="shop-item-price">Ksh.140</h6>
-                                    <button class=" btn btn-primary shop-item-button btn-sm">Add</button>
-                                </div>
-                            </div>
-                        </div>
+    <div class="bg-dark p-3">
+        <div class="row mx-0 py-3 bg-light">
+            <div class="col-sm-7">
+                <div class="card mb-3 rounded-3" style="z-index:1;">
+                    <div class="card-body">
+                        <ul class="nav nav-pills " id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                                    aria-selected="true">Timber nails</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-profile" type="button" role="tab"
+                                    aria-controls="pills-profile" aria-selected="false">Metal toools</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-contact" type="button" role="tab"
+                                    aria-controls="pills-contact" aria-selected="false">Roofing</button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                    Ironsheet
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                        aria-labelledby="pills-home-tab">
+                        <div class="row row-cols-1 row-cols-md-4 g-4   clsscroll">
+                            {% for product in Products %}
+                            <div class="col">
+                                <div class="card" style="width: 200px;width: 200px;">
+                                    <img class="card-img-top" src="{{product.image.url}}"
+                                        style="height: 100px;">
+                                    <div class=" card-body">
+                                        <h6 class=" card-title" id="item_name">{{product.name}}</h6>
+                                        <h6 class="shop-item-price" id="item_price">{{ product.price}}</h6>
+                                        <button class=" btn btn-primary btn-sm shop-item-button" id="shop-btn"
+                                            data-action="add" data-product="{{instance.id}}">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+    
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <div class="row row-cols-1 row-cols-md-4 g-4 clsscroll">
+                            {% for product in Products %}
+                            <div class="col">
+                                <div class="card" style="width: 200px;width: 200px;">
+                                    <img class="card-img-top" src="{{product.image.url}}"
+                                        style="height: 100px;">
+                                    <div class=" card-body">
+                                        <h6 class=" card-title" id="item_name">{{product.name}}</h6>
+                                        <h6 class="shop-item-price" id="item_price">{{ product.price}}</h6>
+                                        <button class=" btn btn-primary btn-sm shop-item-button" id="shop-btn"
+                                            data-action="add" data-product="{{instance.id}}">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                        Ironsheet</div>
                 </div>
-
             </div>
-        </div>
-        <div class="col-sm-5">
-            <div class="card">
-                <div class="card-body">
-                    <h5>Order</h5>
-                    <hr>
-                    <section class="container content-section">
-                        <div class="cart-row">
-                            <span class="cart-item cart-header cart-column">ITEM</span>
-                            <span class="cart-price cart-header cart-column">PRICE</span>
-                            <span class="cart-quantity cart-header cart-column">QUANTITY</span>
-                        </div>
-                        <div class="cart-items clsscroll2">
-                        </div>
-                        <div class="cart-total">
-                            <strong class="cart-total-title">Total</strong>
-                            <span class="cart-total-price">Ksh.0</span><br>
-                        </div>
-                        <button type="button" class="btn btn-success btn-purch" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">CASH</button>
+            <div class="col-sm-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Order</h5>
+                        <hr>
+                        <section class="container content-section">
+                            <div class="cart-row">
+                                <span class="cart-item cart-header cart-column">ITEM</span>
+                                <span class="cart-price cart-header cart-column">PRICE</span>
+                                <span class="cart-quantity cart-header cart-column">QUANTITY</span>
+                            </div>
+                            <div class="cart-items clsscroll2">
+                            </div>
+                            <div class="cart-total">
+                                <strong class="cart-total-title">Total</strong>
+                                <span class="cart-total-price">Ksh.0</span><br>
+                            </div>
+                            <button type="button" class="btn btn-success btn-purch" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">CASH</button>
 
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal"
-                            data-bs-target="#creditModal">CREDIT</button>
-                    </section>
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                                data-bs-target="#creditModal">CREDIT</button>
+                        </section>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!--Cash purcase modal-->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header btn-secondary">
-                <h5 class="modal-title text-white" id="exampleModalLabel">Payment by Cash</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="" method='GET'>
-
+    <!--Cash purcase modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header btn-secondary">
+                    <h5 class="modal-title text-white" id="exampleModalLabel">Payment by Cash</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
                     <div class="d-flex justify-content-center">
                         <label class="btn-lg font-weight-bold text-dark ">Total Expenditure</label> <span
-                            id="totalExpenditure" class="btn-lg font-weight-bold text-dark totalExpenditure"
-                            name="totalPrice">Ksh.0</span>
-                        <!--Start here-->
+                            id="totalExpenditure" class="btn-lg font-weight-bold text-dark totalExpenditure">Ksh.0</span>
                     </div>
                     <div class="d-flex justify-content-center">
                         <input class="form-control form-control-lg  amountPaid" id="price" type="number"
-                            name="amountPaid" placeholder="Amount paid" style="width:100%;">
-                    </div> <br>
+                            placeholder="Amount paid" style="width:100%;">
+                    </div>    <br>
                     <div class="d-flex justify-content-center">
-                        <label class="btn-lg font-weight-bold text-dark">Balance</label>
-                        <input type="text" name="balance" id="total" disabled>
-                        <input type="text" name="balance" id="total1" style="display: none;">
+                        <label class="btn-lg font-weight-bold text-dark ">Balance</label>
+                        <input type="text" id="total" disabled>
                     </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary save" data-bs-dismiss="modal" id="close">Close</button>
-                <button type="submit" class="btn btn-success btn-complete" data-bs-dismiss="modal"
-                    id="save">Save</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
+                    <div>       
+                    </div>
 
-<!--Credit Modal -->
-<div class="modal fade" id="creditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header btn-secondary">
-                <h5 class="modal-title text-white" id="exampleModalLabel">Credits</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="d-flex justify-content-center">
-                    <label class="btn-lg font-weight-bold text-dark">Total Credit</label> <span
-                        class="btn-lg font-weight-bold text-dark">Ksh. 0</span>
                 </div>
-                <input type="text" class="form-control form-control-lg" placeholder="Customer name"
-                    style="width:100%;"><br>
-                <input type="number" class="form-control form-control-lg" placeholder="Phone number"
-                    style="width:100%"><br>
-                <label class="btn-lg font-weight-bold text-dark">Balance</label>
-                <span class="btn-lg font-weight-bold text-dark">Ksh. 0</span>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success btn-complete" data-bs-dismiss="modal">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<script src="{% static 'js/bootstrap/bootstrap.bundle.js' %}"></script>
+
+    <!--Credit Modal -->
+    <div class="modal fade" id="creditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header btn-secondary">
+                    <h5 class="modal-title text-white" id="exampleModalLabel">Credits</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <label class="btn-lg font-weight-bold text-dark">Total Credit</label> <span
+                            class="btn-lg font-weight-bold text-dark">Ksh. 0</span>
+                    </div>
+                    <input type="text" class="form-control form-control-lg" placeholder="Customer name"
+                        style="width:100%;"><br>
+                    <input type="number" class="form-control form-control-lg" placeholder="Phone number"
+                        style="width:100%"><br>
+                    <label class="btn-lg font-weight-bold text-dark">Balance</label>
+                    <span class="btn-lg font-weight-bold text-dark">Ksh. 0</span>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
 </body>
+
 </html>
+
